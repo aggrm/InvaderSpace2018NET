@@ -24,14 +24,6 @@ public class Nave {
     
     public Nave(int _anchoPantalla)
     {
-        try
-        {            
-            imagen = ImageIO.read(getClass().getResource("/imagenes/nave.png"));
-        }
-        catch (IOException e)
-        {
-            
-        }
         this.anchoPantalla = _anchoPantalla;
     }
 

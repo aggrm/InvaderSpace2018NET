@@ -33,7 +33,7 @@ public class Disparo {
     {
         if(y > 0)
         {
-            y-= 5;
+            y-= 10;
         }
     }
     

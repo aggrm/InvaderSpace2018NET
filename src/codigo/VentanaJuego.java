@@ -22,11 +22,6 @@ import javax.swing.Timer;
 /**
  *
  * @author Alberto Goujon
- * 
- * TODO:
- * - Crear un sistema para almacenar todos los macianos
- *      Marciano[][]listaMarcianos
- * - Crear el sistema de choques disparos-marcianos
  */
 public class VentanaJuego extends javax.swing.JFrame {
 
@@ -48,7 +43,7 @@ public class VentanaJuego extends javax.swing.JFrame {
     boolean direccionMarciano = false;                                                  //Direccion en la que se movera la array de marcianos
     
     BufferedImage plantilla = null;
-    BufferedImage[] imagenes = new BufferedImage[30];
+    Image[] imagenes = new Image[30];
                                                                                         
                                                                                         //Bucle de animación del juego
                                                                                         //En este caso es un hilo de ejecucuión nuevo que se encarga
@@ -74,24 +69,31 @@ public class VentanaJuego extends javax.swing.JFrame {
         }
         catch(IOException e){}
         
-        for (int i = 0; i < 6; i++)
+        //Guardo cada sprite en una Image individual. De esta forma es más facil dibujarlo
+        //dependiendo de lo que se necesite
+        for (int i = 0; i < 5; i++)
         {
-            for(int j = 0; j < 5; j++)
+            for(int j = 0; j < 4; j++)
             {
-                imagenes[i*5 + j] = plantilla.getSubimage(j*32, i*32, 32, 32);
+                //corto el trozo de 64x64 que corresponde a ese marciano
+                imagenes[i*4 + j] = plantilla.getSubimage(j*64+1, i*64+1, 64, 64);
+                //cambio el tamaño a 32x32
+                imagenes[i*4 + j] = imagenes[i*4 +j].getScaledInstance(32, 32, Image.SCALE_SMOOTH);
             }
         }
+        imagenes[20] = plantilla.getSubimage(0, 320, 66, 32);
+        imagenes[21] = plantilla.getSubimage(66, 320, 64, 32);
         //Hay que quitar la opción "resizable" del jPanel para que se ajuste
         //correctamente Creditos: Junior
         setSize(ANCHOPANTALLA, ALTOPANTALLA);
         buffer = (BufferedImage) jPanel1.createImage(ANCHOPANTALLA, ALTOPANTALLA);
         buffer.createGraphics();
-        //Inicio el temporizador
-        temporizador.start();
-
+        
         //Meto la nave en el juego
+        miNave.imagen = imagenes[21];
         miNave.x = ANCHOPANTALLA / 2 - miNave.imagen.getWidth(this) / 2;
         miNave.y = ALTOPANTALLA - miNave.imagen.getWidth(this) - 25;
+        
         
         //Creo el array de los marcianos
         for(int i = 0; i <filasMarcianos; i++)
@@ -99,8 +101,8 @@ public class VentanaJuego extends javax.swing.JFrame {
             for(int j=0; j <columnasMarcianos; j++)
             {
                 listaMarcianos[i][j] = new Marciano(ANCHOPANTALLA);
-                listaMarcianos[i][j].imagen = imagenes[2];
-                listaMarcianos[i][j].imagen2 = imagenes[3];
+                listaMarcianos[i][j].imagen = imagenes[2*i];
+                listaMarcianos[i][j].imagen2 = imagenes[2*i+1];
                 listaMarcianos[i][j].x = j * (15 + listaMarcianos[i][j].imagen.getWidth(null));
                 listaMarcianos[i][j].y = i * (10 + listaMarcianos[i][j].imagen.getHeight(null));
                 
